@@ -1,12 +1,18 @@
 package com.example.springApp.models;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -14,14 +20,29 @@ public class User {
     private String lastName;
     private String email;
 
+    private String username;
+    private String password;
+
+
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
+
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email) {
+    public User(String firstName, String lastName, String email, String username, String password, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
 
     }
 
@@ -57,6 +78,56 @@ public class User {
         this.email = email;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     @Override
     public String toString() {
@@ -66,4 +137,6 @@ public class User {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+
 }

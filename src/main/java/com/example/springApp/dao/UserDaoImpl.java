@@ -1,6 +1,7 @@
 package com.example.springApp.dao;
 
 import com.example.springApp.models.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -37,5 +38,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> listUsers() {
         return em.createQuery("from User", User.class).getResultList();
+    }
+
+    @Override
+    public UserDetails getUserByName(String s) {
+        return em.createQuery("SELECT u from User u WHERE u.username = :username", User.class).
+                setParameter("username", s).getSingleResult();
     }
 }

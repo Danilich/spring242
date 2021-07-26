@@ -1,5 +1,6 @@
 package com.example.springApp.service;
 
+import com.example.springApp.models.Role;
 import com.example.springApp.models.User;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface UserService {
     User getUserById(long id);
 
     List<User> listUsers();
+
 }

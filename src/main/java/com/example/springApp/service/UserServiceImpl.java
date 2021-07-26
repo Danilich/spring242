@@ -1,5 +1,6 @@
 package com.example.springApp.service;
 
+
 import com.example.springApp.dao.UserDao;
 import com.example.springApp.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
 
     @Transactional
     @Override
@@ -44,4 +46,5 @@ public class UserServiceImpl implements UserService {
     public List<User> listUsers() {
         return userDao.listUsers();
     }
+
 }
