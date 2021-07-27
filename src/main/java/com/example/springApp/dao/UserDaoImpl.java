@@ -32,17 +32,20 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserById(long id) {
-        return em.find(User.class, id);
+        return em.createQuery("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.id=:id", User.class)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
     @Override
     public List<User> listUsers() {
-        return em.createQuery("from User", User.class).getResultList();
+        return em.createQuery("SELECT  u FROM User u  LEFT JOIN FETCH u.roles", User.class).getResultList();
+
     }
 
     @Override
     public UserDetails getUserByName(String s) {
-        return em.createQuery("SELECT u from User u WHERE u.username = :username", User.class).
+        return em.createQuery("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.username=:username ", User.class).
                 setParameter("username", s).getSingleResult();
     }
 }
