@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> listUsers() {
-        return em.createQuery("SELECT  u FROM User u  LEFT JOIN FETCH u.roles", User.class).getResultList();
+        return em.createQuery("SELECT DISTINCT  u FROM User u  LEFT JOIN FETCH u.roles", User.class).getResultList();
 
     }
 
